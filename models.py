@@ -8,7 +8,6 @@ class Artist(BaseModel):
     last_name: str = Field(...)
     first_name: str = Field(...)
     birth_date: str = Field(...)
-    hobbies: Optional[str]
 
     class Config:
         allow_population_by_field_name = True

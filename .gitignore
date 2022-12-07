@@ -168,3 +168,6 @@ cython_debug/
 
 # Configuration File
 config.json
+
+# Trash
+Requests.md
