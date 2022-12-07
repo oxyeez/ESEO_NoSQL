@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from routes import router as artist_router
 import json
 
-with open('../config/config.json', 'r') as outfile:
+with open('../config.json', 'r') as outfile:
     config = json.load(outfile)
 
 DATABASE_NAME = config['DATABASE_NAME']
