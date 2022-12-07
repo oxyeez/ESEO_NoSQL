@@ -167,7 +167,7 @@ cython_debug/
 .idea/
 
 # Configuration File
-config.json
+config/config.json
 
 # Trash
 Requests.md

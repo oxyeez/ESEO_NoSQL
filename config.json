@@ -1,5 +1,0 @@
-{
-  "DATABASE_NAME": "artists_db",
-  "COLLECTION_NAME": "artists",
-  "MONGODB_PORT": 27017
-}

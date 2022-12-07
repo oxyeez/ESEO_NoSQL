@@ -15,6 +15,7 @@ To run this project locally:
 
 - After that, you can run the app by typing the following command in your terminal:
 ```bash
+$ cd ./api
 $ python -m uvicorn main:app --reload
 ```
 
