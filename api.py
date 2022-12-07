@@ -1,8 +1,10 @@
 from flask import Flask, request, json, Response
 from pymongo import MongoClient, response
 from fastapi import HTTPException, status
-import os
+from fastapi.encoders import jsonable_encoder
 import json
+
+from models import Artist
 
 with open("./config.json", "r") as outfile:
     config = json.load(outfile)
@@ -33,4 +35,15 @@ class MongoAPI:
             return response
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Artist with id {id_artist} not found")
 
+    def create_artist(self, artist: Artist):
+        artist_encoded = jsonable_encoder(artist)
+        new_artist = self.collection.insert_one(artist_encoded)
+        created_artist = self.collection.find_one({
+            "_id": new_artist.inserted_id
+        })
+        return created_artist
+
+
 api = MongoAPI()
+
+print(api.create_artist({"_id": "artist:10000","last_name": "Machet","first_name": "Titouan","birth_date": "09/01/2001"}))
