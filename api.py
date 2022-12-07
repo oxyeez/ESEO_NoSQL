@@ -1,5 +1,5 @@
 from flask import Flask, request, json, Response
-from pymongo import MongoClient
+from pymongo import MongoClient, response
 from fastapi import HTTPException, status
 import os
 import json
@@ -24,7 +24,13 @@ class MongoAPI:
     def get_artist(self, id_artist):
         if (artist := self.collection.find_one({ "_id": id_artist })) is not None:
             return artist
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Artist with id {id} not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Artist with id {id_artist} not found")
 
+    def delete_artist(self, id_artist):
+        delete_result = self.collection.delete_one({ "_id": id_artist })
+        if delete_result.deleted_count == 1:
+            response.status_code = status.HTTP_204_NO_CONTENT
+            return response
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Artist with id {id_artist} not found")
 
 api = MongoAPI()
