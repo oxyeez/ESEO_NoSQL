@@ -12,12 +12,17 @@ def list_artists(request: Request):
     return list(request.app.database["artists"].find(limit=100))
 
 
-@router.get("/{id}", response_description="Get a single artist", response_model=Artist)
+@router.get("/artist/{id}", response_description="Get a single artist", response_model=Artist)
 def find_artist(id: str, request: Request):
     if (artist := request.app.database["artists"].find_one({"_id": id})) is not None:
         return artist
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Artist with id {id} not found")
 
+@router.get("/filter", response_description="Filter artists", response_model=List[Artist])
+def find_with_filter(request: Request, first_name: str = "", last_name: str = "", birth_date: str = ""):
+    return list(request.app.database["artists"].find({"first_name":{"$regex":first_name},
+                                                      "last_name":{"$regex":last_name},
+                                                      "birth_date":{"$regex":birth_date}}))
 
 @router.delete("/{id}", response_description="Delete an artist")
 def delete_artist(id: str, request: Request, response: Response):
