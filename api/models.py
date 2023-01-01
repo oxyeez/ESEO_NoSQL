@@ -1,13 +1,14 @@
+from bson import ObjectId
 from pydantic import BaseModel, Field
-from typing import Optional
-import uuid
-
+from typing import Optional, Union
+from typing import List
+from datetime import datetime
 
 class Artist(BaseModel):
     id: str = Field(alias="_id")
     last_name: str = Field(...)
     first_name: str = Field(...)
-    birth_date: str = Field(...)
+    birth_date: Optional[str] = Field(...)
 
     class Config:
         allow_population_by_field_name = True
@@ -34,3 +35,75 @@ class ArtistUpdate(BaseModel):
                 "birth_date": "07/04/2000"
             }
         }
+
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid objectid")
+        return ObjectId(v)
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(type="string")
+
+class Awards(BaseModel):
+    win: Optional[int] = None
+    nominations: Optional[int] = None
+    text: Optional[str] = None
+
+class IMDB(BaseModel):
+    rating: Optional[float] = None
+    votes: Optional[int] = None
+    id: Optional[int] = None
+
+class Viewer(BaseModel):
+    rating: Union[float, int, None] = None
+    numReviews: Optional[int] = None
+    meter: Optional[int] = None
+
+class Critic(BaseModel):
+    meter: Optional[int] = None
+    numReviews: Optional[int] = None
+    rating: Union[int, float, None] = None
+
+class Tomatoes(BaseModel):
+    consensus: Optional[str] = None
+    critic: Optional[Critic] = None
+    dvd: Optional[datetime] = None
+    fresh: Optional[int] = None
+    lastUpdated: Optional[datetime] = None
+    production: Optional[str] = None
+    rotten: Optional[int] = None
+    viewer: Optional[Viewer] = None
+    website: Optional[str] = None
+
+
+class Movie(BaseModel):
+    #id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    #TODO maybe find a way to display the id
+    awards: Optional[Awards] = None
+    cast: Optional[List[str]] = None
+    countries: Optional[List[str]] = None
+    directors: Optional[List[str]] = None
+    fullplot: Optional[str] = None
+    genres: Optional[List[str]] = None
+    imdb: Optional[IMDB] = None
+    languages: Optional[List[str]] = None
+    lastupdated: Optional[str] = None
+    num_mflix_comments: Optional[int] = None
+    plot: Optional[str] = None
+    poster: Optional[str] = None
+    rated: Optional[str] = None
+    released: Optional[datetime] = None
+    runtine: Optional[int] = None
+    title: str = None
+    tomatoes: Optional[Tomatoes] = None
+    type: Optional[str] = Field(...)
+    writers: Optional[List[str]] = None
+    year: Optional[int] = None
+

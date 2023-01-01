@@ -6,10 +6,17 @@ To run this project locally:
 
 - Create a json configuration file as the following pattern:
 ```json
-{
-  "DATABASE_NAME": <database_name>,
-  "COLLECTION_NAME": <collection_name>,
-  "MONGODB_PORT": <mongodb_port>
+{"DB_TYPE": "ATLAS", //the type of system to use, choices : ATLAS, LOCAL
+  "LOCAL": {
+    "DATABASE_NAME": <database_name>,
+    "MONGODB_PORT": <mongodb_port>
+  },
+  "ATLAS": {
+    "USER": <db_access_user>,
+    "PASSWORD": <db_access_password>,
+    "CLUSTER_URL": <atlas_cluster_url>,
+    "DATABASE_NAME": <database_name>
+  }
 }
 ```
 
