@@ -14,9 +14,7 @@ def list_movies(request: Request):
 @router.get("/filter", response_description="Filter movies", response_model=List[Movie])
 def find_with_filter(request: Request, title: str = "", actors: str = ""):
     if actors != "":
-        return list(request.app.database["movies"].find({"title":{"$regex":title},
-                                                      "cast":{"$all": actors.split(',')}}))
+        return list(request.app.database["movies"].find({"title": {"$regex":title},
+                                                        "cast": {"$all": actors.split(',')}}))
     else:
         return list(request.app.database["movies"].find({"title": {"$regex": title}}))
-
-
