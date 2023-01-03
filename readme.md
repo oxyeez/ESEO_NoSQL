@@ -7,7 +7,7 @@ To run this project locally:
 - Create a json configuration file as the following pattern:
 ```json
 {
-  "DB_TYPE": "ATLAS", //the type of system to use, choices : ATLAS, LOCAL
+  "DB_TYPE": "ATLAS", //the type of system to use, choices : ATLAS, LOCAL OR NEO4J
   "LOCAL": {
     "DATABASE_NAME": <database_name>,
     "MONGODB_PORT": <mongodb_port>
