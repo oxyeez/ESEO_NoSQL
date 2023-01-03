@@ -1,0 +1,6 @@
+fastapi
+pymongo
+pydantic
+neo4j
+py2neo
+neomodel
