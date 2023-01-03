@@ -6,7 +6,8 @@ To run this project locally:
 
 - Create a json configuration file as the following pattern:
 ```json
-{"DB_TYPE": "ATLAS", //the type of system to use, choices : ATLAS, LOCAL
+{
+  "DB_TYPE": "ATLAS", //the type of system to use, choices : ATLAS, LOCAL
   "LOCAL": {
     "DATABASE_NAME": <database_name>,
     "MONGODB_PORT": <mongodb_port>
@@ -16,6 +17,11 @@ To run this project locally:
     "PASSWORD": <db_access_password>,
     "CLUSTER_URL": <atlas_cluster_url>,
     "DATABASE_NAME": <database_name>
+  },
+  "NEO4J": {
+    "NEO4J_URI": <neo4j_db_uri>,
+    "NEO4J_USERNAME": <neo4j_username>,
+    "NEO4J_PASSWORD": <neo4j_password>
   }
 }
 ```
