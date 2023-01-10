@@ -19,9 +19,10 @@ To run this project locally:
     "DATABASE_NAME": <database_name>
   },
   "NEO4J": {
-    "NEO4J_URI": <neo4j_db_uri>,
-    "NEO4J_USERNAME": <neo4j_username>,
-    "NEO4J_PASSWORD": <neo4j_password>
+    "URI": <neo4j_db_uri>,
+    "USERNAME": <neo4j_access_username>,
+    "PASSWORD": <neo4j_access_password>,
+    "DATABASE_NAME": <database_name>
   }
 }
 ```
