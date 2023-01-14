@@ -276,3 +276,14 @@ class MovieUpdate(BaseModel):
                 "year": 1928
             }
         }
+
+class Person(BaseModel):
+    id: int = None
+    name: str = None
+    born: Optional[int] = None
+
+class MovieBasic(BaseModel):
+    id: int = None
+    title: str = None
+    tagline: str = None
+    released: int = None
