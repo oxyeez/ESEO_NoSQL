@@ -21,8 +21,7 @@ To run this project locally:
   "NEO4J": {
     "URI": <neo4j_db_uri>,
     "USERNAME": <neo4j_access_username>,
-    "PASSWORD": <neo4j_access_password>,
-    "DATABASE_NAME": <database_name>
+    "PASSWORD": <neo4j_access_password> // bolt://<ip>:<port>
   }
 }
 ```
