@@ -19,9 +19,9 @@ class Configurator:
     def make_config(self):
         # build NEO4J config
         self.final_config['NEO4J'] = {
-            "NEO4J_URI": self.config['NEO4J']['NEO4J_URI'],
-            "NEO4J_USERNAME": self.config['NEO4J']['NEO4J_USERNAME'],
-            "NEO4J_PASSWORD": self.config['NEO4J']['NEO4J_PASSWORD']
+            "URI": self.config['NEO4J']['URI'],
+            "USERNAME": self.config['NEO4J']['USERNAME'],
+            "PASSWORD": self.config['NEO4J']['PASSWORD']
         }
 
         # build dynamic config

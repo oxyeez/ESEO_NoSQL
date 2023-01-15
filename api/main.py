@@ -6,37 +6,24 @@ from mongo_movies_routes import router as mongo_movies_router
 from neo4j_movies_routes import router as neo4j_movies_router
 from mongo_neo4j_routes import router as mongo_neo4j_router
 
-import json
+from utils.Configurator import Configurator
 
-with open('../config.json', 'r') as outfile:
-    config = json.load(outfile)
-
-DB_TYPE = config['DB_TYPE']
-if DB_TYPE == 'LOCAL':
-    local_conf = config['LOCAL']
-    MONGODB_DATABASE_NAME = local_conf['DATABASE_NAME']
-    MONGODB_PORT = local_conf['MONGODB_PORT']
-elif DB_TYPE == 'ATLAS':
-    atlas_conf = config['ATLAS']
-    ATLAS_USER = atlas_conf['USER']
-    ATLAS_PASSWORD = atlas_conf['PASSWORD']
-    ATLAS_CLUSTER_URL = atlas_conf['CLUSTER_URL']
-    MONGODB_DATABASE_NAME = atlas_conf['DATABASE_NAME']
-
+CONFIG_FILE_PATH = "../config.json"
+configurator = Configurator(config_file_path=CONFIG_FILE_PATH)
+config = configurator.final_config
+db_type = configurator.db_type
+print(f"Got the following config: {config}")
 
 app = FastAPI()
 
-
 @app.on_event("startup")
 def startup_cb_client():
-    if DB_TYPE == 'LOCAL':
-        app.mongodb_client = MongoClient(f"mongodb://localhost:{MONGODB_PORT}")
-    elif DB_TYPE == 'ATLAS':
-        app.mongodb_client = MongoClient(f"mongodb+srv://{ATLAS_USER}:{ATLAS_PASSWORD}@{ATLAS_CLUSTER_URL}/{MONGODB_DATABASE_NAME}?retryWrites=true&w=majority")
-    app.database = app.mongodb_client[MONGODB_DATABASE_NAME]
+    if db_type == 'LOCAL':
+        app.mongodb_client = MongoClient(f"mongodb://localhost:{config['DYN']['MONGODB_PORT']}")
+    elif db_type == 'ATLAS':
+        app.mongodb_client = MongoClient(f"mongodb+srv://{config['DYN']['ATLAS_USER']}:{config['DYN']['ATLAS_PASSWORD']}@{config['DYN']['ATLAS_CLUSTER_URL']}/{config['DYN']['MONGO_DATABASE_NAME']}?retryWrites=true&w=majority")
 
-
-
+    app.database = app.mongodb_client[config['DYN']['MONGO_DATABASE_NAME']]
 
 @app.on_event("shutdown")
 def shutdown_db_client():

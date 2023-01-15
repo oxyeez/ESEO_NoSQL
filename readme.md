@@ -4,7 +4,7 @@ This project aims to provide an API (FastAPI Python) in the way to deal with a M
 
 To run this project locally:
 
-- Create a json configuration file as the following pattern:
+- Create a json configuration file at the root of the project as the following pattern:
 ```json
 {
   "DB_TYPE": "ATLAS", //the type of system to use, choices : ATLAS, LOCAL OR NEO4J
