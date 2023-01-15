@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from mongo_artists_routes import router as mongo_artists_router
 from mongo_movies_routes import router as mongo_movies_router
 from neo4j_movies_routes import router as neo4j_movies_router
+from mongo_neo4j_routes import router as mongo_neo4j_router
 
 import json
 
@@ -45,3 +46,4 @@ def shutdown_db_client():
 app.include_router(mongo_artists_router, tags=['artists from mongodb'], prefix="/mongo_artists")
 app.include_router(mongo_movies_router, tags=['movies from mongodb'], prefix="/mongo_movies")
 app.include_router(neo4j_movies_router, tags=['movies from neo4j'], prefix="/neo4j_movies")
+app.include_router(mongo_neo4j_router, tags=['movies from mongodb and neo4j'], prefix="/mongo_neo4j_movies")

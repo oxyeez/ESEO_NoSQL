@@ -27,7 +27,7 @@ def find_assessors(movie: str):
     return assessors
 
 
-@router.get("/assessor/{user}", response_description="List users who rated a movie",
+@router.get("/assessor/{user}", response_description="List movies rated by a user and give the count",
             response_model=Dict[str, Union[int, List[MovieBasic]]])
 def find_assessors(user: str):
     query = '''
