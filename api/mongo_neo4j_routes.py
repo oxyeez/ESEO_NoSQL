@@ -5,8 +5,8 @@ from utils.neo4j_driver import driver
 router = APIRouter()
 
 
-@router.get("/movie_comparison", response_description="Compare movies on Mongo and on Neo4j", response_model=int)
-def find_assessors(request: Request):
+@router.get("/common_movies", response_description="Compare movies on Mongo and on Neo4j", response_model=int)
+def find_common_movies(request: Request):
     # Requesting neo4j
     query = '''
             MATCH (movie:Movie) 

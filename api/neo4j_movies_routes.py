@@ -29,7 +29,7 @@ def find_assessors(movie: str):
 
 @router.get("/assessments", response_description="List movies rated by all user or a requested user and give the count",
             response_model=List[Dict[str, Union[int, Person, List[MovieBasic]]]])
-def find_assessors(user: str = None):
+def find_assessments(user: str = None):
     if user is None or user == '':
         query = f"""
                 MATCH (p:Person)-[:REVIEWED]->(m:Movie)
