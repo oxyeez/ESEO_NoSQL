@@ -20,12 +20,9 @@ def find_artist(id: str, request: Request):
 
 
 @router.get("/filter", response_description="Filter movies", response_model=List[Movie])
-def find_with_filter(request: Request, title: str = "", actors: str = ""):
-    if actors != "":
-        return list(request.app.database["movies"].find({"title": {"$regex": title},
-                                                         "cast": {"$all": actors.split(',')}}))
-    else:
-        return list(request.app.database["movies"].find({"title": {"$regex": title}}))
+def find_with_filter(request: Request, title: str = "", actor: str = ""):
+    return list(request.app.database["movies"].find({"title": {"$regex": title},
+                                                     "cast": {"$regex": actor}}))
 
 
 @router.delete("/{id}", response_description="Delete an movie")
