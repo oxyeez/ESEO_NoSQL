@@ -1,6 +1,5 @@
 import json
 
-
 class Configurator:
     def __init__(self, config_file_path):
         self.config_file_path = config_file_path
@@ -39,3 +38,7 @@ class Configurator:
             }
         else:
             print("Unknown DB_TYPE...")
+
+
+CONFIG_FILE_PATH = "../config.json"
+configurator = Configurator(config_file_path=CONFIG_FILE_PATH)

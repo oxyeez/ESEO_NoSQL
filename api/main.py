@@ -6,13 +6,10 @@ from mongo_movies_routes import router as mongo_movies_router
 from neo4j_movies_routes import router as neo4j_movies_router
 from mongo_neo4j_routes import router as mongo_neo4j_router
 
-from utils.Configurator import Configurator
+from utils.Configurator import configurator
 
-CONFIG_FILE_PATH = "../config.json"
-configurator = Configurator(config_file_path=CONFIG_FILE_PATH)
 config = configurator.final_config
 db_type = configurator.db_type
-print(f"Got the following config: {config}")
 
 app = FastAPI()
 
