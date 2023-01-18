@@ -9,11 +9,11 @@ router = APIRouter()
 
 @router.get("/assessors/{movie}", response_description="List users who rated a movie", response_model=List[Person])
 def find_assessors(movie: str):
-    query = '''
+    query = f"""
             MATCH (assessor:Person)-[:REVIEWED]->(m:Movie) 
-            WHERE m.title = $movie 
+            WHERE m.title CONTAINS '{movie}' 
             RETURN assessor
-            '''
+            """
 
     with driver.session() as session:
         assessors_in_db = session.run(query, movie=movie).data()
@@ -27,24 +27,36 @@ def find_assessors(movie: str):
     return assessors
 
 
-@router.get("/assessor/{user}", response_description="List movies rated by a user and give the count",
-            response_model=Dict[str, Union[int, List[MovieBasic]]])
-def find_assessors(user: str):
-    query = '''
-            MATCH (p:Person)-[:REVIEWED]->(m:Movie) 
-            WHERE p.name = $user 
-            RETURN count(m) AS count, collect(m) AS movies
-            '''
+@router.get("/assessments", response_description="List movies rated by all user or a requested user and give the count",
+            response_model=List[Dict[str, Union[int, Person, List[MovieBasic]]]])
+def find_assessors(user: str = None):
+    if user is None or user == '':
+        query = f"""
+                MATCH (p:Person)-[:REVIEWED]->(m:Movie)
+                RETURN p as assessor, count(m) AS count, collect(m) AS movies
+                """
+
+    else:
+        query = f"""
+                MATCH (p:Person)-[:REVIEWED]->(m:Movie) 
+                WHERE p.name CONTAINS '{user}'
+                RETURN p as assessor, count(m) AS count, collect(m) AS movies
+                """
 
     with driver.session() as session:
-        assessor_in_db = session.run(query, user=user).data()[0]
-    print(assessor_in_db['movies'])
-    assessor = {'count': assessor_in_db['count'], 'movies': []}
+        assessments_in_db = session.run(query).data()
 
-    for movie in assessor_in_db['movies']:
-        print(movie)
-        m = MovieBasic(**movie)
-        m.id = movie.id
-        assessor['movies'].append(m)
+    assessments = []
+    for assessment_in_db in assessments_in_db:
+        assessor = Person(**assessment_in_db['assessor'])
+        assessor.id = assessment_in_db['assessor'].id
 
-    return assessor
+        movies = []
+        for movie in assessment_in_db['movies']:
+            m = MovieBasic(**movie)
+            m.id = movie.id
+            movies.append(m)
+
+        assessments.append({'user': assessor, 'count': assessment_in_db['count'], 'movies': movies})
+
+    return assessments
