@@ -83,8 +83,8 @@ class Tomatoes(BaseModel):
 
 
 class Movie(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    #TODO maybe find a way to display the id
+    #id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    #TODO maybe find a way to work well with id
     awards: Optional[Awards] = None
     cast: Optional[List[str]] = None
     countries: Optional[List[str]] = None
@@ -99,10 +99,10 @@ class Movie(BaseModel):
     poster: Optional[str] = None
     rated: Optional[str] = None
     released: Optional[datetime] = None
-    runtine: Optional[int] = None
+    runtime: Optional[int] = None
     title: str = None
     tomatoes: Optional[Tomatoes] = None
-    type: Optional[str] = Field(...)
+    type: Optional[str] = None
     writers: Optional[List[str]] = None
     year: Optional[int] = None
 
@@ -112,7 +112,6 @@ class Movie(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "_id": "573a1391f29313caabcd8ce8",
                 "awards": {
                     "win": 1,
                     "nominations": 2,
@@ -182,7 +181,6 @@ class Movie(BaseModel):
 
 
 class MovieUpdate(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     awards: Optional[Awards] = None
     cast: Optional[List[str]] = None
     countries: Optional[List[str]] = None
@@ -197,10 +195,10 @@ class MovieUpdate(BaseModel):
     poster: Optional[str] = None
     rated: Optional[str] = None
     released: Optional[datetime] = None
-    runtine: Optional[int] = None
+    runtime: Optional[int] = None
     title: Optional[str] = None
     tomatoes: Optional[Tomatoes] = None
-    type: Optional[str] = Field(...)
+    type: Optional[str] = None
     writers: Optional[List[str]] = None
     year: Optional[int] = None
 

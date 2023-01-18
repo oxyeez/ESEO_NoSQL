@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Response, HTTPException, status, Body
 from fastapi.encoders import jsonable_encoder
 from typing import List
 
-from models import Movie, MovieUpdate, ObjectId
+from models import Movie, MovieUpdate
 
 router = APIRouter()
 
@@ -12,30 +12,19 @@ def list_movies(request: Request):
     return list(request.app.database["movies"].find(limit=100))
 
 
-@router.get("/movie/{id}", response_description="Get a single movie", response_model=Movie)
-def find_artist(id: str, request: Request):
-    if (movie := request.app.database["movies"].find_one({"_id": ObjectId(id)})) is not None:
-        return movie
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Movie with id {id} not found")
-
-
 @router.get("/filter", response_description="Filter movies", response_model=List[Movie])
 def find_with_filter(request: Request, title: str = "", actor: str = ""):
-    return list(request.app.database["movies"].find({"title": {"$regex": title},
-                                                     "cast": {"$regex": actor}}))
-
-
-@router.delete("/{id}", response_description="Delete an movie")
-def delete_movie(id: str, request: Request, response: Response):
-    delete_result = request.app.database["movies"].delete_one({"_id": ObjectId(id)})
-    if delete_result.deleted_count == 1:
-        response.status_code = status.HTTP_204_NO_CONTENT
-        return response
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Movie with id {id} not found")
+    if title == '' or title is None:
+        return list(request.app.database["movies"].find({"cast": {"$regex": actor}}))
+    elif actor == '' or actor is None:
+        return list(request.app.database["movies"].find({"title": {"$regex": title}}))
+    else:
+        return list(request.app.database["movies"].find({"title": {"$regex": title},
+                                                         "cast": {"$regex": actor}}))
 
 
 @router.post("/", response_description="Create a new movie", status_code=status.HTTP_201_CREATED, response_model=Movie)
-def create_movie(request: Request, movie: MovieUpdate = Body(...)):
+def create_movie(request: Request, movie: Movie = Body(...)):
     movie = jsonable_encoder(movie)
     new_movie = request.app.database["movies"].insert_one(movie)
     if (created_movie := request.app.database["movies"].find_one({"_id": new_movie.inserted_id})) is not None:
@@ -43,15 +32,15 @@ def create_movie(request: Request, movie: MovieUpdate = Body(...)):
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Movie not created")
 
 
-@router.put("/{id}", response_description="Update a movie", response_model=Movie)
-def update_movie(id: str, request: Request, movie: MovieUpdate = Body(...)):
+@router.put("/{title}", response_description="Update a movie", response_model=Movie)
+def update_movie(title: str, request: Request, movie: MovieUpdate = Body(...)):
     movie = {k: v for k, v in movie.dict().items() if v is not None}
     if len(movie) >= 1:
         update_result = request.app.database["movies"].update_one(
-            {"_id": ObjectId(id)}, {"$set": movie}
+            {"title": title}, {"$set": movie}
         )
         if update_result.modified_count == 0:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Movie with id {id} not found")
-    if (existing_movie := request.app.database["movies"].find_one({"_id": ObjectId(id)})) is not None:
+    if (existing_movie := request.app.database["movies"].find_one({"title": title})) is not None:
         return existing_movie
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Movie with id {id} not found")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Movie with title {title} not found")
