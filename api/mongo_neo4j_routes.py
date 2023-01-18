@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request
-from typing import List, Dict, Union
 
 from utils.neo4j_driver import driver
 

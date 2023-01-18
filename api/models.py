@@ -1,7 +1,6 @@
 from bson import ObjectId
 from pydantic import BaseModel, Field
-from typing import Optional, Union
-from typing import List
+from typing import Optional, Union, List
 from datetime import datetime
 
 class Artist(BaseModel):
